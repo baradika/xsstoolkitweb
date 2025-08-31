@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* XSS Toolkit Dark Theme - Professional Security Research Tool */
+    --background: 210 11% 15%;
+    --foreground: 210 40% 98%;
+    
+    --card: 210 11% 13%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 210 11% 13%;
+    --popover-foreground: 210 40% 98%;
+    
+    /* Cyan accent for professional security aesthetic */
+    --primary: 189 100% 50%;
+    --primary-foreground: 210 11% 15%;
+    
+    --secondary: 210 11% 20%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 210 11% 18%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --accent: 189 85% 45%;
+    --accent-foreground: 210 11% 15%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 210 11% 25%;
+    --input: 210 11% 20%;
+    --ring: 189 100% 50%;
+    
+    --radius: 0.5rem;
+    
+    /* Sidebar specific colors */
+    --sidebar-background: 210 11% 12%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 189 100% 50%;
+    --sidebar-primary-foreground: 210 11% 15%;
+    --sidebar-accent: 210 11% 18%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 210 11% 25%;
+    --sidebar-ring: 189 100% 50%;
+    
+    /* XSS Toolkit specific colors */
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
+    --warning: 45 93% 47%;
+    --warning-foreground: 210 11% 15%;
+    
+    /* Encoding chain display */
+    --chain-bg: 210 11% 17%;
+    --chain-border: 189 50% 30%;
+    --chain-text: 189 100% 80%;
+    
+    /* Payload highlighting */
+    --payload-bg: 210 11% 18%;
+    --payload-border: 210 11% 30%;
+    --payload-highlight: 189 100% 50%;
+  }
+  
+  .light {
+    /* Optional light theme override - keeping dark as default for security tool aesthetic */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 189 100% 40%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 189 85% 45%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 189 100% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Force dark theme for XSS Toolkit */
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+}
