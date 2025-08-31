@@ -11,7 +11,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar"
 
 const navigationItems = [
@@ -30,18 +29,22 @@ const navigationItems = [
 ]
 
 export function AppSidebar() {
-  const { open, setOpen } = useSidebar()
   const location = useLocation()
   const currentPath = location.pathname
   const [isMobile, setIsMobile] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // Deteksi ukuran layar
   useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-      if (window.innerWidth >= 768) {
-        setMobileOpen(false)
+      const mobile = window.innerWidth < 768
+      setIsMobile(mobile)
+      
+      // Di desktop, sidebar selalu terbuka
+      if (!mobile) {
+        setSidebarOpen(true)
+      } else {
+        setSidebarOpen(false)
       }
     }
     
@@ -53,12 +56,20 @@ export function AppSidebar() {
     }
   }, [])
 
-  const isActive = (path: string) => currentPath === path
-
-  // Tutup sidebar mobile saat mengklik link
-  const handleNavClick = () => {
+  // Tutup sidebar ketika route berubah (untuk mobile)
+  useEffect(() => {
     if (isMobile) {
-      setMobileOpen(false)
+      setSidebarOpen(false)
+    }
+  }, [location.pathname, isMobile])
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen)
+  }
+
+  const closeSidebar = () => {
+    if (isMobile) {
+      setSidebarOpen(false)
     }
   }
 
@@ -67,31 +78,31 @@ export function AppSidebar() {
       {/* Mobile toggle button */}
       {isMobile && (
         <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="fixed top-4 left-4 z-50 p-2 rounded-md text-white md:hidden"
+          onClick={toggleSidebar}
+          className="fixed top-4 left-4 z-50 p-2 rounded-md bg-primary text-white md:hidden"
         >
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       )}
 
       {/* Overlay untuk mobile */}
-      {isMobile && mobileOpen && (
+      {isMobile && sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-opacity-50 z-40 md:hidden"
-          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          onClick={closeSidebar}
         />
       )}
 
       <Sidebar 
-        className={`border-r border-sidebar-border bg-sidebar ${
+        className={`border-r border-sidebar-border bg-sidebar w-64 ${
           isMobile 
             ? `fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out ${
-                mobileOpen ? 'translate-x-0' : '-translate-x-full'
+                sidebarOpen ? 'translate-x-0' : '-translate-x-full'
               }`
-            : ''
+            : 'block'
         }`}
       >
-        <SidebarContent>
+        <SidebarContent className="h-full">
           {/* Header */}
           <div className="px-4 py-6 border-b border-sidebar-border">
             <div className="flex items-center gap-3">
@@ -102,7 +113,7 @@ export function AppSidebar() {
               </div>
               {isMobile && (
                 <button 
-                  onClick={() => setMobileOpen(false)}
+                  onClick={closeSidebar}
                   className="ml-auto p-1 rounded-md hover:bg-sidebar-accent text-white"
                 >
                   <X className="h-4 w-4" />
@@ -112,7 +123,7 @@ export function AppSidebar() {
           </div>
 
           {/* Navigation */}
-          <SidebarGroup>
+          <SidebarGroup className="flex-1">
             <SidebarGroupLabel>Tools</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
@@ -121,11 +132,11 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild>
                       <NavLink
                         to={item.url}
-                        onClick={handleNavClick}
+                        onClick={closeSidebar} // Langsung tutup sidebar saat diklik
                         className={({ isActive }) =>
                           `flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
                             isActive
-                              ? ""
+                              ? "bg-primary text-primary-foreground"
                               : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                           }`
                         }
@@ -133,7 +144,7 @@ export function AppSidebar() {
                         <item.icon className="h-4 w-4" />
                         <div className="flex-1">
                           <div className="text-sm font-medium">{item.title}</div>
-                          <div className={`text-xs ${isActive(item.url) ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
+                          <div className={`text-xs ${currentPath === item.url ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
                             {item.description}
                           </div>
                         </div>
@@ -146,7 +157,7 @@ export function AppSidebar() {
           </SidebarGroup>
 
           {/* Footer Info */}
-          <div className="mt-auto p-4 border-t border-sidebar-border">
+          <div className="p-4 border-t border-sidebar-border">
             <div className="text-xs text-muted-foreground">
               <p className="font-medium mb-1">Tool</p>
               <p>For CTF and Bug Bounty Hunting</p>

@@ -263,61 +263,67 @@ export default function EncoderDecoder() {
   ]
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-background text-foreground p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 md:space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-primary">XSS Payload Encoder/Decoder</h1>
-          <p className="text-muted-foreground">Professional Security Research Tool for Bug Bounty Hunters</p>
+          <h1 className="text-2xl md:text-4xl font-bold text-primary">XSS Payload Encoder/Decoder</h1>
+          <p className="text-sm md:text-base text-muted-foreground">
+            Advanced payload manipulation for XSS testing
+          </p>
         </div>
 
         {/* Encoding Chain Display */}
         <Card className="bg-chain-bg border-chain-border">
-          <CardHeader>
-            <CardTitle className="text-chain-text">Encoding Chain</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-chain-text text-base md:text-lg">Encoding Chain</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 md:p-6 pt-0">
             {encodingChain.length > 0 ? (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1 md:gap-2">
                 {encodingChain.map((operation, index) => (
-                  <Badge key={index} variant="outline" className="border-chain-border text-chain-text">
+                  <Badge 
+                    key={index} 
+                    variant="outline" 
+                    className="border-chain-border text-chain-text text-xs md:text-sm"
+                  >
                     {operation}
                   </Badge>
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground">No operations performed</p>
+              <p className="text-muted-foreground text-sm md:text-base">No operations performed</p>
             )}
           </CardContent>
         </Card>
 
         {/* Input/Output Section */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Input */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex justify-between items-center">
+            <CardHeader className="p-4 md:p-6">
+              <CardTitle className="flex justify-between items-center text-base md:text-lg">
                 Input
-                <span className="text-sm text-muted-foreground">{input.length} chars</span>
+                <span className="text-xs md:text-sm text-muted-foreground">{input.length} chars</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="p-4 md:p-6 space-y-3 md:space-y-4">
               <Textarea
                 placeholder="Enter your payload here..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="min-h-[200px] font-mono"
+                className="min-h-[120px] md:min-h-[200px] font-mono text-sm md:text-base"
               />
-              <div className="flex gap-2">
-                <Button onClick={applyEncoding} className="flex-1">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button onClick={applyEncoding} className="flex-1 text-xs md:text-sm">
                   Encode
                 </Button>
-                <Button onClick={autoDecodeCommon} variant="success" className="flex-1">
+                <Button onClick={autoDecodeCommon} variant="success" className="flex-1 text-xs md:text-sm">
                   Auto-Decode
                 </Button>
-                <Button onClick={clearAll} variant="outline">
-                  <RotateCcw className="h-4 w-4 mr-2" />
-                  Clear All
+                <Button onClick={clearAll} variant="outline" className="text-xs md:text-sm">
+                  <RotateCcw className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+                  Clear
                 </Button>
               </div>
             </CardContent>
@@ -325,36 +331,37 @@ export default function EncoderDecoder() {
 
           {/* Output */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex justify-between items-center">
+            <CardHeader className="p-4 md:p-6">
+              <CardTitle className="flex justify-between items-center text-base md:text-lg">
                 Output
-                <span className="text-sm text-muted-foreground">{output.length} chars</span>
+                <span className="text-xs md:text-sm text-muted-foreground">{output.length} chars</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="p-4 md:p-6 space-y-3 md:space-y-4">
               <Textarea
                 placeholder="Processed output will appear here..."
                 value={output}
                 readOnly
-                className="min-h-[200px] font-mono bg-muted"
+                className="min-h-[120px] md:min-h-[200px] font-mono bg-muted text-sm md:text-base"
               />
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Button
                   onClick={() => copyToClipboard(output, "Output")}
                   variant="outline"
-                  className="flex-1"
+                  className="flex-1 text-xs md:text-sm"
                   disabled={!output}
                 >
-                  <Copy className="h-4 w-4 mr-2" />
-                  Copy All Results
+                  <Copy className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+                  Copy Results
                 </Button>
                 <Button
                   onClick={swapInputOutput}
                   variant="outline"
+                  className="text-xs md:text-sm"
                   disabled={!output}
                 >
-                  <ArrowUpDown className="h-4 w-4 mr-2" />
-                  Swap Input/Output
+                  <ArrowUpDown className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+                  Swap
                 </Button>
               </div>
             </CardContent>
@@ -362,15 +369,15 @@ export default function EncoderDecoder() {
         </div>
 
         {/* Encoding Options */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {operationGroups.map((group) => (
             <Card key={group.title}>
-              <CardHeader>
-                <CardTitle className="text-sm font-medium text-muted-foreground">
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-xs md:text-sm font-medium text-muted-foreground">
                   {group.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="p-4 md:p-6 pt-0 space-y-2 md:space-y-3">
                 {group.operations.map((opKey) => {
                   const operation = encodingOperations[opKey]
                   return (
@@ -379,10 +386,11 @@ export default function EncoderDecoder() {
                         id={opKey}
                         checked={selectedOperations[opKey] || false}
                         onCheckedChange={() => toggleOperation(opKey)}
+                        className="h-3 w-3 md:h-4 md:w-4"
                       />
                       <label
                         htmlFor={opKey}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                        className="text-xs md:text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                       >
                         {operation.name}
                       </label>

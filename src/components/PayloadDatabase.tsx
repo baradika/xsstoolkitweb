@@ -672,47 +672,49 @@ export default function PayloadDatabase() {
   const categories = ["all", ...Array.from(new Set(payloadDatabase.map(p => p.category)))]
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-background text-foreground p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 md:space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-primary">XSS PAYLOAD DATABASE</h1>
-          <p className="text-muted-foreground">Select karakter yang terkena filter</p>
+          <h1 className="text-2xl md:text-4xl font-bold text-primary">XSS PAYLOAD DATABASE</h1>
+          <p className="text-sm md:text-base text-muted-foreground">
+            Select karakter yang terkena filter
+          </p>
         </div>
 
         {/* Enhanced Search and Controls */}
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-3 md:gap-4 md:grid-cols-2">
           <Card>
-            <CardContent className="pt-6">
+            <CardContent className="p-4 md:p-6">
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search payloads, descriptions, or tags..."
+                  placeholder="Search payloads..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 text-sm md:text-base"
                 />
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardContent className="pt-6">
+            <CardContent className="p-4 md:p-6">
               <div className="flex gap-2">
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="flex-1">
+                  <SelectTrigger className="flex-1 text-xs md:text-sm">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map(category => (
-                      <SelectItem key={category} value={category}>
+                      <SelectItem key={category} value={category} className="text-xs md:text-sm">
                         {category === "all" ? "All Categories" : category}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <Button onClick={refreshPayloads} variant="outline" size="icon">
-                  <RefreshCw className="h-4 w-4" />
+                <Button onClick={refreshPayloads} variant="outline" size="icon" className="h-10 w-10">
+                  <RefreshCw className="h-3 w-3 md:h-4 md:w-4" />
                 </Button>
               </div>
             </CardContent>
@@ -721,34 +723,34 @@ export default function PayloadDatabase() {
 
         {/* Filter Options */}
         <Card>
-          <CardHeader>
-            <CardTitle className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <Filter className="h-5 w-5" />
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 md:gap-0">
+              <div className="flex items-center gap-2 text-base md:text-lg">
+                <Filter className="h-4 w-4 md:h-5 md:w-5" />
                 Character Filters
               </div>
-              <div className="flex gap-2">
-                <Button onClick={downloadPayloads} variant="outline" size="sm">
-                  <Download className="h-4 w-4 mr-2" />
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={downloadPayloads} variant="outline" size="sm" className="text-xs md:text-sm">
+                  <Download className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
                   Export
                 </Button>
-                <Button onClick={copyAllPayloads} variant="outline" size="sm">
-                  <Copy className="h-4 w-4 mr-2" />
+                <Button onClick={copyAllPayloads} variant="outline" size="sm" className="text-xs md:text-sm">
+                  <Copy className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
                   Copy All
                 </Button>
-                <Button onClick={clearFilters} variant="outline" size="sm">
-                  Clear All
+                <Button onClick={clearFilters} variant="outline" size="sm" className="text-xs md:text-sm">
+                  Clear
                 </Button>
               </div>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
+          <CardContent className="p-4 md:p-6 pt-0">
+            <div className="flex flex-wrap gap-1 md:gap-2">
               {filterOptions.map(option => (
                 <Badge
                   key={option.char}
                   variant={selectedFilters.includes(option.char) ? "default" : "outline"}
-                  className="cursor-pointer px-3 py-1"
+                  className="cursor-pointer px-2 py-1 text-xs md:text-sm"
                   onClick={() => toggleFilter(option.char)}
                 >
                   {option.label}
@@ -756,8 +758,8 @@ export default function PayloadDatabase() {
               ))}
             </div>
             {selectedFilters.length > 0 && (
-              <div className="mt-4 p-3 bg-muted rounded-lg">
-                <p className="text-sm text-muted-foreground mb-2">
+              <div className="mt-3 md:mt-4 p-3 bg-muted rounded-lg">
+                <p className="text-xs md:text-sm text-muted-foreground mb-2">
                   Showing payloads that work when these characters are filtered:
                 </p>
                 <div className="flex flex-wrap gap-1">
@@ -773,19 +775,26 @@ export default function PayloadDatabase() {
         </Card>
 
         {/* Enhanced Results Stats */}
-        <div className="flex flex-wrap justify-between items-center gap-4">
-          <div className="flex items-center gap-4">
-            <p className="text-muted-foreground">
-              Found <span className="font-bold text-primary">{filteredPayloads.length}</span> payload(s) 
-              {selectedCategory !== "all" && ` in ${selectedCategory}`}
-              {selectedFilters.length > 0 && ` with filters applied`}
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2">
+            <p className="text-sm md:text-base text-muted-foreground">
+              Found <span className="font-bold text-primary">{filteredPayloads.length}</span> payload(s)
             </p>
+            {selectedCategory !== "all" && (
+              <Badge variant="secondary" className="text-xs">
+                {selectedCategory}
+              </Badge>
+            )}
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1 md:gap-2">
             {categories.slice(1).map(category => {
               const count = filteredPayloads.filter(p => p.category === category).length
               return count > 0 && (
-                <Badge key={category} variant={selectedCategory === category ? "default" : "outline"}>
+                <Badge 
+                  key={category} 
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  className="text-xs"
+                >
                   {category}: {count}
                 </Badge>
               )
@@ -794,11 +803,11 @@ export default function PayloadDatabase() {
         </div>
 
         {/* Payload Results */}
-        <div className="grid gap-4">
+        <div className="grid gap-3 md:gap-4">
           {filteredPayloads.length === 0 ? (
             <Card>
-              <CardContent className="pt-6 text-center">
-                <p className="text-muted-foreground">
+              <CardContent className="p-6 text-center">
+                <p className="text-sm md:text-base text-muted-foreground">
                   No payloads found matching your filters. Try removing some filters or adjusting your search.
                 </p>
               </CardContent>
@@ -806,12 +815,12 @@ export default function PayloadDatabase() {
           ) : (
             filteredPayloads.map(payload => (
               <Card key={payload.id} className="hover:bg-card/80 transition-colors">
-                <CardContent className="pt-6">
-                  <div className="space-y-4">
+                <CardContent className="p-4 md:p-6">
+                  <div className="space-y-3 md:space-y-4">
                     {/* Payload */}
-                    <div className="flex justify-between items-start gap-4">
-                      <div className="flex-1">
-                        <code className="block p-3 bg-payload-bg border border-payload-border rounded font-mono text-sm break-all">
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
+                      <div className="flex-1 min-w-0">
+                        <code className="block p-3 bg-payload-bg border border-payload-border rounded font-mono text-xs md:text-sm break-all whitespace-pre-wrap">
                           {payload.payload}
                         </code>
                       </div>
@@ -819,18 +828,22 @@ export default function PayloadDatabase() {
                         onClick={() => copyPayload(payload.payload)}
                         variant="outline" 
                         size="sm"
-                        className="shrink-0"
+                        className="shrink-0 self-start sm:self-center"
                       >
-                        <Copy className="h-4 w-4" />
+                        <Copy className="h-3 w-3 md:h-4 md:w-4" />
                       </Button>
                     </div>
 
                     {/* Description and Metadata */}
                     <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">{payload.description}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+                        {payload.description}
+                      </p>
                       
-                      <div className="flex flex-wrap gap-2 items-center">
-                        <Badge variant="secondary">{payload.category}</Badge>
+                      <div className="flex flex-wrap gap-1 md:gap-2 items-center">
+                        <Badge variant="secondary" className="text-xs">
+                          {payload.category}
+                        </Badge>
                         {payload.tags.map(tag => (
                           <Badge key={tag} variant="outline" className="text-xs">
                             {tag}
